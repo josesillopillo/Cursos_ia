@@ -1,0 +1,41 @@
+version: '3.8'
+
+# Aquí definimos nuestra Arquitectura basada en Microservicios
+services:
+
+  # Microservicio 1: El servidor web Frontend
+  frontend:
+    build: ./frontend # Le pide a Docker que construya la imagen leyendo nuestro archivo 'Dockerfile' en /frontend
+    ports:
+      - "8081:80" # Mapea nuestro puerto local 8081 al puerto interno 80 del contenedor
+    networks:
+      - app-network # Conecta el frontend a la red interna segura
+    depends_on:
+      - database # Indica a Docker: "Espera a que arranque la Base de Datos primero"
+
+  # Microservicio 2: Nuestra Base de Datos estructurada
+  database:
+    image: postgres:15-alpine # Descarga una base de datos ya contenerizada directamente
+    environment:
+      POSTGRES_USER: administrador
+      POSTGRES_DB: ia_courses_db
+      # ATENCIÓN DOCENTE (Prueba/Laboratorio):
+      # Las claves escritas aquí en texto plano (Hardcodeadas) son un anti-patrón crítico.
+      # Solucionaremos esto con Shift Left y Manejo de Secretos en la Fase de DevSecOps.
+      POSTGRES_PASSWORD: secure_password_123
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data # Permite que los cursos sobrevivan si el contenedor muere
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql # Ejecuta el esquema automáticamente
+    networks:
+      - app-network
+
+# Red Privada: Fundamental para aislar la comunicación de la aplicación
+networks:
+  app-network:
+    driver: bridge
+
+# Almacenamiento Persistente para salvaguardar la Base de Datos
+volumes:
+  db_data:

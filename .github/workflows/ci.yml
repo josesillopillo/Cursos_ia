@@ -1,0 +1,46 @@
+name: DevOps Pipeline - Integración Continua (CI)
+
+# Definimos CUÁNDO se gatilla este proceso ('Triggers')
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request: # Fomenta las buenas tácticas de equipo en ramas antes del 'merge'
+    branches:
+      - main
+
+# Etapas Automáticas
+jobs:
+  continuous-integration:
+    name: Build, Test & Quality Gate
+    runs-on: ubuntu-latest # Una máquina efímera temporal para compilar (Agente)
+    
+    steps:
+      # Paso 1: Descargar el código más reciente del repositorio (GitFlow)
+      - name: 📥 Clonar Repositorio
+        uses: actions/checkout@v3
+
+      # Paso 2: Ejecutar Pruebas Automatizadas (Unit, Integration) 
+      # "Fail Fast" activado: Si esto falla, el flujo entero se detiene inmediatamente.
+      - name: 🧪 Ejecutar Pruebas Automatizadas (Mock)
+        run: |
+          echo "=> Ejecutando Pruebas Unitarias... (Éxito)"
+          echo "=> Ejecutando Pruebas de Integración... (Éxito)"
+
+      # Paso 3: Puerta de Calidad (Quality Gate) usando SonarQube
+      # Verifica que el código cumpla con el >80% coverage, 0 Bugs críticos, <3% duplicación.
+      - name: 🔍 Análisis Estático y Quality Gate (SonarQube)
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          # Si la calidad no es suficiente, rompe el pipeline ('true')
+          args: >
+            -Dsonar.projectKey=ia_courses_web
+            -Dsonar.qualitygate.wait=true
+
+      # Paso 4: Creación de la Imagen y preparativa
+      - name: 🐳 Construir Imagen de Docker (Frontend)
+        run: docker build -t ia-courses-frontend:${{ github.sha }} .

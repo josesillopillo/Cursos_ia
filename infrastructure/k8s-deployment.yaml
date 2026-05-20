@@ -1,0 +1,40 @@
+# ==== Kubernetes (Orquestación en Producción) ====
+# A diferencia de Docker Compose (Local), K8s opera a gran escala.
+
+# 1. DEPLOYMENT: Aquí Kubernetes se asegura de que tus contenedores nunca mueran realmente.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  # Deseabilidad de Alta Disponibilidad: Exigimos 3 contenedores (Pods) paralelos siempre vivos.
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: ia-courses-frontend
+        image: ia-courses-frontend:latest # La imagen generada por nuestro pipeline CI (Fase 4)
+        ports:
+        - containerPort: 80
+
+---
+# 2. SERVICE: La puerta de enlace que rutea el tráfico.
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  # LoadBalancer proveerá una dirección IP pública balanceando cargas hacia las 3 réplicas que declaramos arriba.
+  type: LoadBalancer
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
