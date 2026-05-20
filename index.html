@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Master | Cursos Premium de Inteligencia Artificial</title>
+    <meta name="description" content="Domina la Inteligencia Artificial con nuestros cursos especializados. Aprende Machine Learning, Prompt Engineering y DevOps con IA.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">AI<span>Master</span></div>
+        <ul class="nav-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#cursos">Cursos</a></li>
+            <li><a href="#comunidad">Comunidad</a></li>
+        </ul>
+        <button class="btn-primary">Iniciar Sesión</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>Domina la <span>Inteligencia Artificial</span></h1>
+            <p>Impulsa tu carrera al siguiente nivel. Descubre cómo integrar, entrenar y desplegar modelos de IA con estándares DevOps.</p>
+            <div class="hero-buttons">
+                <a href="#cursos" class="btn-primary">Explorar Cursos</a>
+                <a href="#" class="btn-secondary">Ver Temario</a>
+            </div>
+        </div>
+        <div class="hero-graphics">
+            <div class="glow-orb"></div>
+        </div>
+    </header>
+
+    <!-- Cursos Section -->
+    <section id="cursos" class="courses-section">
+        <div class="section-title">
+            <h2>Rutas de <span>Aprendizaje</span></h2>
+            <p>Formación desde cero hasta niveles de arquitectura avanzada.</p>
+        </div>
+        
+        <div class="courses-grid">
+            <!-- Curso 1 -->
+            <article class="course-card">
+                <div class="card-badge">Básico</div>
+                <h3>Prompt Engineering</h3>
+                <p>Aprende a interactuar de forma estructurada y avanzada con LLMs para maximizar sus respuestas.</p>
+                <div class="course-meta">
+                    <span>4 Semanas</span>
+                    <span>Proyectos Reales</span>
+                </div>
+                <button class="btn-outline" onclick="inscribirse('Prompt Engineering')">Ver Detalles</button>
+            </article>
+
+            <!-- Curso 2 -->
+            <article class="course-card featured">
+                <div class="card-badge">Avanzado</div>
+                <h3>DevOps con Agentes IA</h3>
+                <p>Integra IA en tus pipelines CI/CD, automatiza revisiones de código y optimiza infraestructuras.</p>
+                <div class="course-meta">
+                    <span>8 Semanas</span>
+                    <span>Docker & K8s</span>
+                </div>
+                <button class="btn-primary" onclick="inscribirse('DevOps con Agentes IA')">Ver Detalles</button>
+            </article>
+
+            <!-- Curso 3 -->
+            <article class="course-card">
+                <div class="card-badge">Intermedio</div>
+                <h3>Machine Learning Base</h3>
+                <p>Construye, evalúa y despliega modelos predictivos utilizando Python y frameworks modernos.</p>
+                <div class="course-meta">
+                    <span>6 Semanas</span>
+                    <span>Python & PyTorch</span>
+                </div>
+                <button class="btn-outline" onclick="inscribirse('Machine Learning Base')">Ver Detalles</button>
+            </article>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 AI Master. Proyecto Universitario de Arquitectura DevOps.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
