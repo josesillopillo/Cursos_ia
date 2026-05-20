@@ -5,7 +5,9 @@ services:
 
   # Microservicio 1: El servidor web Frontend
   frontend:
-    build: ./frontend # Le pide a Docker que construya la imagen leyendo nuestro archivo 'Dockerfile' en /frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "8081:80" # Mapea nuestro puerto local 8081 al puerto interno 80 del contenedor
     networks:
