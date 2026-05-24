@@ -1,43 +1,82 @@
-version: '3.8'
-
-# Aquí definimos nuestra Arquitectura basada en Microservicios
 services:
-
-  # Microservicio 1: El servidor web Frontend
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: frontend.Dockerfile
     ports:
-      - "8081:80" # Mapea nuestro puerto local 8081 al puerto interno 80 del contenedor
+      - "8081:80"
     networks:
-      - app-network # Conecta el frontend a la red interna segura
+      - app-network
     depends_on:
-      - database # Indica a Docker: "Espera a que arranque la Base de Datos primero"
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
 
-  # Microservicio 2: Nuestra Base de Datos estructurada
-  database:
-    image: postgres:15-alpine # Descarga una base de datos ya contenerizada directamente
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    ports:
+      - "4000:3000"
     environment:
-      POSTGRES_USER: administrador
-      POSTGRES_DB: ia_courses_db
-      # ATENCIÓN DOCENTE (Prueba/Laboratorio):
-      # Las claves escritas aquí en texto plano (Hardcodeadas) son un anti-patrón crítico.
-      # Solucionaremos esto con Shift Left y Manejo de Secretos en la Fase de DevSecOps.
-      POSTGRES_PASSWORD: secure_password_123
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-change-in-production}
+      POSTGRES_USER: ${POSTGRES_USER:-administrador}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Database password is required}
+      POSTGRES_DB: ${POSTGRES_DB:-ia_courses_db}
+      POSTGRES_HOST: database
+      POSTGRES_PORT: 5432
+      CORS_ORIGIN: http://localhost:8081
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', r => process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+  database:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-administrador}
+      POSTGRES_DB: ${POSTGRES_DB:-ia_courses_db}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Database password is required}
     ports:
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data # Permite que los cursos sobrevivan si el contenedor muere
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql # Ejecuta el esquema automáticamente
+      - db_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-administrador} -d ${POSTGRES_DB:-ia_courses_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
-# Red Privada: Fundamental para aislar la comunicación de la aplicación
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@ia-cursos.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    depends_on:
+      - database
+    networks:
+      - app-network
+    restart: unless-stopped
+
 networks:
   app-network:
     driver: bridge
 
-# Almacenamiento Persistente para salvaguardar la Base de Datos
 volumes:
   db_data:

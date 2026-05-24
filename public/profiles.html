@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comunidad | AI Master</title>
+    <meta name="description" content="Conoce a la comunidad de estudiantes de AI Master.">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/profiles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6d28d9">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">AI<span>Master</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="index.html#cursos">Cursos</a></li>
+            <li><a href="profiles.html" class="active">Comunidad</a></li>
+            <li><a href="perfil.html" id="nav-perfil-link">Mi Perfil</a></li>
+        </ul>
+        <div class="nav-actions">
+            <div id="nav-user-dropdown" class="user-dropdown hidden">
+                <button id="dropdown-toggle" class="btn-secondary dropdown-btn">
+                    <span id="nav-user-name">Usuario</span>
+                    <span class="dropdown-arrow">&#9662;</span>
+                </button>
+                <div id="dropdown-menu" class="dropdown-menu hidden">
+                    <a href="perfil.html" class="dropdown-item">Mi Perfil</a>
+                    <a href="profiles.html" class="dropdown-item">Comunidad</a>
+                    <hr class="dropdown-divider">
+                    <button id="nav-logout-link" class="dropdown-item logout-item">Cerrar Sesion</button>
+                </div>
+            </div>
+            <button id="nav-login-btn" class="btn-primary" onclick="window.location.href='index.html'">Iniciar Sesion</button>
+        </div>
+    </nav>
+
+    <main class="profiles-container">
+        <div class="profiles-header">
+            <h1>Comunidad <span>AI Master</span></h1>
+            <p>Conoce a los estudiantes y explora sus progresos en los cursos.</p>
+            <div class="profiles-stats-banner" id="profiles-stats-banner">
+                <div class="banner-stat">
+                    <span class="banner-number" id="total-users">-</span>
+                    <span class="banner-label">Estudiantes</span>
+                </div>
+                <div class="banner-stat">
+                    <span class="banner-number" id="total-enrollments">-</span>
+                    <span class="banner-label">Inscripciones</span>
+                </div>
+                <div class="banner-stat">
+                    <span class="banner-number" id="total-courses">-</span>
+                    <span class="banner-label">Cursos</span>
+                </div>
+            </div>
+            <div class="profiles-search">
+                <input type="text" id="search-user" placeholder="Buscar estudiante por nombre o correo...">
+            </div>
+        </div>
+
+        <div id="users-grid" class="users-grid">
+            <div class="skeleton-grid">
+                <div class="user-card skeleton-card" style="padding:1.5rem;text-align:center"><div class="skeleton" style="width:64px;height:64px;border-radius:50%;margin:0 auto 1rem"></div><div class="skeleton skeleton-title" style="width:60%;margin:0 auto 0.3rem"></div><div class="skeleton skeleton-text short" style="width:70%;margin:0 auto 1rem"></div><div style="display:flex;gap:1rem;justify-content:center"><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div></div></div>
+                <div class="user-card skeleton-card" style="padding:1.5rem;text-align:center"><div class="skeleton" style="width:64px;height:64px;border-radius:50%;margin:0 auto 1rem"></div><div class="skeleton skeleton-title" style="width:60%;margin:0 auto 0.3rem"></div><div class="skeleton skeleton-text short" style="width:70%;margin:0 auto 1rem"></div><div style="display:flex;gap:1rem;justify-content:center"><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div></div></div>
+                <div class="user-card skeleton-card" style="padding:1.5rem;text-align:center"><div class="skeleton" style="width:64px;height:64px;border-radius:50%;margin:0 auto 1rem"></div><div class="skeleton skeleton-title" style="width:60%;margin:0 auto 0.3rem"></div><div class="skeleton skeleton-text short" style="width:70%;margin:0 auto 1rem"></div><div style="display:flex;gap:1rem;justify-content:center"><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div></div></div>
+                <div class="user-card skeleton-card" style="padding:1.5rem;text-align:center"><div class="skeleton" style="width:64px;height:64px;border-radius:50%;margin:0 auto 1rem"></div><div class="skeleton skeleton-title" style="width:60%;margin:0 auto 0.3rem"></div><div class="skeleton skeleton-text short" style="width:70%;margin:0 auto 1rem"></div><div style="display:flex;gap:1rem;justify-content:center"><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div></div></div>
+                <div class="user-card skeleton-card" style="padding:1.5rem;text-align:center"><div class="skeleton" style="width:64px;height:64px;border-radius:50%;margin:0 auto 1rem"></div><div class="skeleton skeleton-title" style="width:60%;margin:0 auto 0.3rem"></div><div class="skeleton skeleton-text short" style="width:70%;margin:0 auto 1rem"></div><div style="display:flex;gap:1rem;justify-content:center"><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div></div></div>
+                <div class="user-card skeleton-card" style="padding:1.5rem;text-align:center"><div class="skeleton" style="width:64px;height:64px;border-radius:50%;margin:0 auto 1rem"></div><div class="skeleton skeleton-title" style="width:60%;margin:0 auto 0.3rem"></div><div class="skeleton skeleton-text short" style="width:70%;margin:0 auto 1rem"></div><div style="display:flex;gap:1rem;justify-content:center"><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div><div class="skeleton skeleton-meta" style="height:30px;width:60px"></div></div></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 AI Master. Proyecto Universitario de Arquitectura DevOps.</p>
+    </footer>
+
+    <script src="js/profiles.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
+            });
+        }
+    </script>
+</body>
+</html>

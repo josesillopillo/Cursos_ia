@@ -1,0 +1,11 @@
+# ============================================
+# Terraform Variables de Ejemplo
+# Copia como terraform.tfvars y completa
+# ============================================
+project_name     = "ia-courses"
+environment      = "production"
+aws_region       = "us-east-1"
+db_password      = "your-secure-db-password-here"
+node_desired_size = 2
+node_min_size     = 1
+node_max_size     = 5

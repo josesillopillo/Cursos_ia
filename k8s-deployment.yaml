@@ -1,0 +1,4 @@
+# Los manifests de Kubernetes estan en ./k8s/
+# Usa: kubectl apply -k k8s/
+#
+# Para GitOps con ArgoCD, ver: ./argocd/k8s-deployment.yaml

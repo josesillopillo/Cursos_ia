@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: ia-courses
+data:
+  node-env: "production"
+  cors-origin: "https://cursos-ia.example.com"
+  postgres-host: "ia-courses-db.ci4ks8uyk1vp.us-east-1.rds.amazonaws.com"
+  postgres-port: "5432"

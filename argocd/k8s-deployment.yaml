@@ -1,40 +1,26 @@
-# ==== Kubernetes (Orquestación en Producción) ====
-# A diferencia de Docker Compose (Local), K8s opera a gran escala.
-
-# 1. DEPLOYMENT: Aquí Kubernetes se asegura de que tus contenedores nunca mueran realmente.
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: frontend-deployment
+  name: ia-courses
+  namespace: argocd
 spec:
-  # Deseabilidad de Alta Disponibilidad: Exigimos 3 contenedores (Pods) paralelos siempre vivos.
-  replicas: 3
-  selector:
-    matchLabels:
-      app: frontend
-  template:
-    metadata:
-      labels:
-        app: frontend
-    spec:
-      containers:
-      - name: ia-courses-frontend
-        image: ia-courses-frontend:latest # La imagen generada por nuestro pipeline CI (Fase 4)
-        ports:
-        - containerPort: 80
-
----
-# 2. SERVICE: La puerta de enlace que rutea el tráfico.
-apiVersion: v1
-kind: Service
-metadata:
-  name: frontend-service
-spec:
-  # LoadBalancer proveerá una dirección IP pública balanceando cargas hacia las 3 réplicas que declaramos arriba.
-  type: LoadBalancer
-  selector:
-    app: frontend
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
+  project: default
+  source:
+    repoURL: https://github.com/tu-usuario/ia-courses.git
+    targetRevision: main
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ia-courses
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ApplyOutOfSyncOnly=true
+  ignoreDifferences:
+  - group: apps
+    kind: Deployment
+    jsonPointers:
+    - /spec/replicas

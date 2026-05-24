@@ -1,39 +1,48 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Master | Cursos Premium de Inteligencia Artificial</title>
-    <meta name="description"
-        content="Domina la Inteligencia Artificial con nuestros cursos especializados. Aprende Machine Learning, Prompt Engineering y DevOps con IA.">
+    <meta name="description" content="Domina la Inteligencia Artificial con nuestros cursos especializados.">
     <link rel="stylesheet" href="css/styles.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6d28d9">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">AI<span>Master</span></div>
         <ul class="nav-links">
-            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#inicio" class="active">Inicio</a></li>
             <li><a href="#cursos">Cursos</a></li>
-            <li><a href="#comunidad">Comunidad</a></li>
+            <li><a href="profiles.html">Comunidad</a></li>
+            <li><a href="perfil.html" id="nav-perfil-link" class="hidden-link">Mi Perfil</a></li>
         </ul>
-        <button class="btn-primary">Iniciar Sesión</button>
+        <div class="nav-actions">
+            <div id="nav-user-dropdown" class="user-dropdown hidden">
+                <button id="dropdown-toggle" class="btn-secondary dropdown-btn">
+                    <span id="nav-user-name">Usuario</span>
+                    <span class="dropdown-arrow">&#9662;</span>
+                </button>
+                <div id="dropdown-menu" class="dropdown-menu hidden">
+                    <a href="perfil.html" class="dropdown-item">Mi Perfil</a>
+                    <a href="profiles.html" class="dropdown-item">Comunidad</a>
+                    <hr class="dropdown-divider">
+                    <button id="nav-logout-link" class="dropdown-item logout-item">Cerrar Sesion</button>
+                </div>
+            </div>
+            <button id="nav-login-btn" class="btn-primary" onclick="toggleModal()">Iniciar Sesion</button>
+        </div>
     </nav>
 
-    <!-- Hero Section -->
     <header id="inicio" class="hero">
         <div class="hero-content">
             <h1>Domina la <span>Inteligencia Artificial</span></h1>
-            <p>Impulsa tu carrera al siguiente nivel. Descubre cómo integrar, entrenar y desplegar modelos de IA con
-                estándares DevOps.</p>
+            <p>Impulsa tu carrera al siguiente nivel. Descubre como integrar, entrenar y desplegar modelos de IA con estandares DevOps.</p>
             <div class="hero-buttons">
                 <a href="#cursos" class="btn-primary">Explorar Cursos</a>
-                <a href="#" class="btn-secondary">Ver Temario</a>
+                <a href="#cursos" class="btn-secondary">Ver Temario</a>
             </div>
         </div>
         <div class="hero-graphics">
@@ -41,49 +50,25 @@
         </div>
     </header>
 
-    <!-- Cursos Section -->
     <section id="cursos" class="courses-section">
         <div class="section-title">
-            <h2>Rutas de <span>Aprendizaje</span></h2>
-            <p>Formación desde cero hasta niveles de arquitectura avanzada.</p>
+            <h2>Catalogo de <span>Cursos</span></h2>
+            <p>Elige entre mas de 30 cursos organizados por categoria.</p>
         </div>
 
-        <div class="courses-grid">
-            <!-- Curso 1 -->
-            <article class="course-card">
-                <div class="card-badge">Básico</div>
-                <h3>Prompt Engineering</h3>
-                <p>Aprende a interactuar de forma estructurada y avanzada con LLMs para maximizar sus respuestas.</p>
-                <div class="course-meta">
-                    <span>4 Semanas</span>
-                    <span>Proyectos Reales</span>
-                </div>
-                <button class="btn-outline" onclick="inscribirse('Prompt Engineering')">Ver Detalles</button>
-            </article>
+        <div class="category-filters" id="category-filters">
+            <button class="filter-btn active" data-categoria="todas">Todas</button>
+        </div>
 
-            <!-- Curso 2 -->
-            <article class="course-card featured">
-                <div class="card-badge">Avanzado</div>
-                <h3>DevOps con Agentes IA</h3>
-                <p>Integra IA en tus pipelines CI/CD, automatiza revisiones de código y optimiza infraestructuras.</p>
-                <div class="course-meta">
-                    <span>8 Semanas</span>
-                    <span>Docker & K8s</span>
-                </div>
-                <button class="btn-primary" onclick="inscribirse('DevOps con Agentes IA')">Ver Detalles</button>
-            </article>
-
-            <!-- Curso 3 -->
-            <article class="course-card">
-                <div class="card-badge">Intermedio</div>
-                <h3>Machine Learning Base</h3>
-                <p>Construye, evalúa y despliega modelos predictivos utilizando Python y frameworks modernos.</p>
-                <div class="course-meta">
-                    <span>6 Semanas</span>
-                    <span>Python & PyTorch</span>
-                </div>
-                <button class="btn-outline" onclick="inscribirse('Machine Learning Base')">Ver Detalles</button>
-            </article>
+        <div class="courses-grid" id="courses-grid">
+            <div class="skeleton-grid">
+                <div class="course-card skeleton-card"><div class="card-header"><div class="skeleton skeleton-badge"></div><div class="skeleton skeleton-icon"></div></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="course-meta"><div class="skeleton skeleton-meta"></div><div class="skeleton skeleton-meta"></div></div><div class="skeleton skeleton-btn"></div></div>
+                <div class="course-card skeleton-card"><div class="card-header"><div class="skeleton skeleton-badge"></div><div class="skeleton skeleton-icon"></div></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="course-meta"><div class="skeleton skeleton-meta"></div><div class="skeleton skeleton-meta"></div></div><div class="skeleton skeleton-btn"></div></div>
+                <div class="course-card skeleton-card"><div class="card-header"><div class="skeleton skeleton-badge"></div><div class="skeleton skeleton-icon"></div></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="course-meta"><div class="skeleton skeleton-meta"></div><div class="skeleton skeleton-meta"></div></div><div class="skeleton skeleton-btn"></div></div>
+                <div class="course-card skeleton-card"><div class="card-header"><div class="skeleton skeleton-badge"></div><div class="skeleton skeleton-icon"></div></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="course-meta"><div class="skeleton skeleton-meta"></div><div class="skeleton skeleton-meta"></div></div><div class="skeleton skeleton-btn"></div></div>
+                <div class="course-card skeleton-card"><div class="card-header"><div class="skeleton skeleton-badge"></div><div class="skeleton skeleton-icon"></div></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="course-meta"><div class="skeleton skeleton-meta"></div><div class="skeleton skeleton-meta"></div></div><div class="skeleton skeleton-btn"></div></div>
+                <div class="course-card skeleton-card"><div class="card-header"><div class="skeleton skeleton-badge"></div><div class="skeleton skeleton-icon"></div></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div><div class="course-meta"><div class="skeleton skeleton-meta"></div><div class="skeleton skeleton-meta"></div></div><div class="skeleton skeleton-btn"></div></div>
+            </div>
         </div>
     </section>
 
@@ -91,7 +76,37 @@
         <p>&copy; 2026 AI Master. Proyecto Universitario de Arquitectura DevOps.</p>
     </footer>
 
-    <script src="js/script.js"></script>
-</body>
+    <div id="auth-modal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <span class="close-btn" onclick="toggleModal()">&times;</span>
+            <div class="tabs">
+                <button id="tab-login" class="active" onclick="switchTab('login')">Ingresar</button>
+                <button id="tab-register" onclick="switchTab('register')">Nuevo Registro</button>
+            </div>
 
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Ingresa tu correo" required>
+                <input type="password" id="login-password" placeholder="Tu contrasena" required>
+                <button type="submit" class="btn-primary w-100">Entrar a Clase</button>
+            </form>
+
+            <form id="register-form" class="hidden">
+                <input type="text" id="register-name" placeholder="Nombre completo" required>
+                <input type="email" id="register-email" placeholder="Nuevo correo" required>
+                <input type="password" id="register-password" placeholder="Crea una contrasena" required>
+                <button type="submit" class="btn-primary w-100">Registrarme Gratis</button>
+            </form>
+            <p id="auth-message" class="error-msg"></p>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
+            });
+        }
+    </script>
+</body>
 </html>
