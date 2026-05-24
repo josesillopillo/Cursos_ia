@@ -22,7 +22,7 @@ services:
       NODE_ENV: production
       JWT_SECRET: ${JWT_SECRET:-dev-secret-change-in-production}
       POSTGRES_USER: ${POSTGRES_USER:-administrador}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Database password is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secure_password_123}
       POSTGRES_DB: ${POSTGRES_DB:-ia_courses_db}
       POSTGRES_HOST: database
       POSTGRES_PORT: 5432
@@ -45,7 +45,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-administrador}
       POSTGRES_DB: ${POSTGRES_DB:-ia_courses_db}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Database password is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secure_password_123}
     ports:
       - "5432:5432"
     volumes:
