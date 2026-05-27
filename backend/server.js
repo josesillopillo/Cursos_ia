@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 const { body, validationResult } = require('express-validator');
 const infisical = require('./infisical');
+const prometheus = require('./prometheus');
 
 const app = express();
 
@@ -29,6 +30,8 @@ const pool = new Pool({
 pool.on('error', (err) => {
   console.error('[DB] Error inesperado en el pool de conexiones:', err.message);
 });
+
+prometheus.attachPool(pool);
 
 async function initDatabase() {
   const client = await pool.connect();
@@ -379,6 +382,13 @@ function handleValidationErrors(req, res, next) {
   }
   next();
 }
+
+// Metrics (Prometheus)
+app.use(prometheus.middleware);
+app.get('/api/metrics', async (req, res) => {
+  res.set('Content-Type', prometheus.register.contentType);
+  res.end(await prometheus.register.metrics());
+});
 
 // Health
 app.get('/api/health', async (req, res) => {

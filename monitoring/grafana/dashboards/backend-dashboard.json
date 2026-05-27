@@ -1,0 +1,90 @@
+{
+  "title": "AI Master - Backend",
+  "uid": "backend",
+  "version": 1,
+  "timezone": "browser",
+  "panels": [
+    {
+      "title": "Backend Health",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 4, "x": 0, "y": 0 },
+      "targets": [{ "expr": "up{job=\"backend\"}", "legendFormat": "Backend" }],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": { "steps": [{ "color": "green", "value": null }] },
+          "color": { "mode": "thresholds" }
+        }
+      }
+    },
+    {
+      "title": "Uptime",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 4, "x": 4, "y": 0 },
+      "targets": [{ "expr": "process_uptime_seconds{job=\"backend\"}", "legendFormat": "Uptime" }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": { "mode": "palette-classic" }
+        }
+      }
+    },
+    {
+      "title": "Requests per Second",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
+      "targets": [{ "expr": "rate(http_requests_total{job=\"backend\"}[5m])", "legendFormat": "{{method}} {{route}}" }],
+      "fieldConfig": {
+        "defaults": { "unit": "rps" }
+      }
+    },
+    {
+      "title": "Request Duration (p50/p90/p99)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        { "expr": "histogram_quantile(0.5, rate(http_request_duration_seconds_bucket[5m]))", "legendFormat": "p50" },
+        { "expr": "histogram_quantile(0.9, rate(http_request_duration_seconds_bucket[5m]))", "legendFormat": "p90" },
+        { "expr": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))", "legendFormat": "p99" }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "s" }
+      }
+    },
+    {
+      "title": "HTTP Status Codes",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        { "expr": "rate(http_requests_total{job=\"backend\",status_code=~\"2..\"}[5m])", "legendFormat": "2xx" },
+        { "expr": "rate(http_requests_total{job=\"backend\",status_code=~\"4..\"}[5m])", "legendFormat": "4xx" },
+        { "expr": "rate(http_requests_total{job=\"backend\",status_code=~\"5..\"}[5m])", "legendFormat": "5xx" }
+      ]
+    },
+    {
+      "title": "DB Pool Connections",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "targets": [
+        { "expr": "db_pool_size{job=\"backend\",type=\"total\"}", "legendFormat": "Total" },
+        { "expr": "db_pool_size{job=\"backend\",type=\"active\"}", "legendFormat": "Active" },
+        { "expr": "db_pool_size{job=\"backend\",type=\"idle\"}", "legendFormat": "Idle" },
+        { "expr": "db_pool_size{job=\"backend\",type=\"waiting\"}", "legendFormat": "Waiting" }
+      ]
+    },
+    {
+      "title": "Node CPU Usage",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "targets": [{ "expr": "rate(process_cpu_user_seconds_total{job=\"backend\"}[5m]) * 100", "legendFormat": "CPU %" }]
+    },
+    {
+      "title": "Memory Usage",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+      "targets": [{ "expr": "nodejs_external_memory_bytes{job=\"backend\"}", "legendFormat": "External" }],
+      "fieldConfig": {
+        "defaults": { "unit": "bytes" }
+      }
+    }
+  ]
+}

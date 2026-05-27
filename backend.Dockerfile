@@ -21,6 +21,7 @@ RUN apk add --no-cache curl && \
 COPY --from=builder /build/node_modules ./node_modules
 COPY backend/server.js ./
 COPY backend/infisical.js ./
+COPY backend/prometheus.js ./
 COPY backend/docker-entrypoint.sh ./
 
 RUN chmod +x docker-entrypoint.sh && chown -R appuser:appgroup /usr/src/app
