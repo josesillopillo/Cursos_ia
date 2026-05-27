@@ -146,17 +146,18 @@ services:
     restart: unless-stopped
 
   tempo:
-    image: grafana/tempo:latest
+    image: grafana/tempo:2.9.1
     ports:
       - "3200:3200"
+      - "9095:9095"
       - "4317:4317"
       - "4318:4318"
-    user: root
     volumes:
-      - ./monitoring/tempo/tempo.yml:/etc/tempo/tempo.yml
-      - tempo_data:/tmp/tempo
+      - ./monitoring/tempo/tempo.yml:/etc/tempo/config.yml:ro
+      - tempo_data:/var/tempo
+    user: root
     command:
-      - '-config.file=/etc/tempo/tempo.yml'
+      - '-config.file=/etc/tempo/config.yml'
     networks:
       - app-network
     restart: unless-stopped
