@@ -1,7 +1,7 @@
 {
   "title": "AI Master - Backend",
   "uid": "backend",
-  "version": 1,
+  "version": 2,
   "timezone": "browser",
   "panels": [
     {
@@ -85,6 +85,19 @@
       "fieldConfig": {
         "defaults": { "unit": "bytes" }
       }
+    },
+    {
+      "title": "Backend Logs",
+      "type": "logs",
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 32 },
+      "targets": [
+        {
+          "expr": "{service=\"backend\"} |= ``",
+          "datasource": "Loki",
+          "refId": "A"
+        }
+      ],
+      "datasource": "Loki"
     }
   ]
 }

@@ -69,14 +69,12 @@ let poolRef = null;
 function attachPool(pool) {
   poolRef = pool;
   setInterval(() => {
-    if (poolRef && poolRef.totalCount !== undefined) {
-      trackPoolSize(
-        poolRef.totalCount,
-        poolRef.activeCount,
-        poolRef.idleCount,
-        poolRef.waitingCount,
-      );
-    }
+    if (!poolRef) return;
+    const total = poolRef.totalCount != null ? poolRef.totalCount : 0;
+    const active = poolRef.activeCount != null ? poolRef.activeCount : 0;
+    const idle = poolRef.idleCount != null ? poolRef.idleCount : 0;
+    const waiting = poolRef.waitingCount != null ? poolRef.waitingCount : 0;
+    trackPoolSize(total, active, idle, waiting);
   }, 10000);
 }
 

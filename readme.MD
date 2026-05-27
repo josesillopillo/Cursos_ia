@@ -171,12 +171,16 @@ De esta forma, **alguien que descargue el proyecto puede ejecutarlo inmediatamen
 │   └── terraform.tfvars.example
 ├── monitoring/
 │   ├── prometheus.yml        # Config Prometheus
+│   ├── loki/
+│   │   └── promtail-config.yml  # Config Promtail para logs
+│   ├── tempo/
+│   │   └── tempo.yml         # Config Tempo para tracing distribuido
 │   ├── grafana/
 │   │   ├── datasources/
-│   │   │   └── datasource.yml   # Datasource Prometheus para Grafana
+│   │   │   └── datasource.yml   # Datasources Prometheus + Loki + Tempo
 │   │   └── dashboards/
 │   │       ├── dashboard.yml    # Provisioning de dashboards
-│   │       └── backend-dashboard.json  # Dashboard de backend
+│   │       └── backend-dashboard.json  # Dashboard con metricas + logs
 ├── scripts/
 │   └── setup-infisical.sh    # Setup interactivo de Infisical
 ├── infisical.json            # Config de workspace Infisical
@@ -249,50 +253,36 @@ El pipeline en GitHub Actions automatiza:
 
 ## Monitoreo
 
-La aplicación incluye un stack completo de observabilidad para desarrollo local con Docker Compose.
+La aplicación incluye un stack completo de observabilidad (MELT: Metrics, Events, Logs, Traces) para desarrollo local con Docker Compose.
 
 ### Servicios de monitoreo
 
 | Servicio | Puerto | Descripción |
 |----------|--------|-------------|
-| **Prometheus** | `9090` | Recopilación de métricas del backend, node-exporter y自身 |
-| **Grafana** | `3001` | Dashboards de visualización con datasource Prometheus pre-configurado |
+| **Prometheus** | `9090` | Recopilación de métricas del backend, node-exporter y sí mismo |
+| **Grafana** | `3001` | Dashboards de visualización con datasources Prometheus, Loki y Tempo pre-configurados |
+| **Loki** | `3100` | Agregación de logs del backend (recibidos vía Promtail) |
+| **Promtail** | — | Colector de logs que lee los contenedores Docker y los envía a Loki |
+| **Tempo** | `3200`, `4317`, `4318` | Trazado distribuido (OTLP gRPC y HTTP) |
 | **node-exporter** | `9100` | Métricas del sistema anfitrión (CPU, memoria, disco, red) |
 
 ### Endpoints de métricas
 
-- `/api/health` — Health check con estado de la BD (JSON)
-- `/api/metrics` — Métricas en formato Prometheus (vía `prom-client`)
+### Trazado distribuido (Tempo)
 
-### Métricas expuestas por el backend
+El backend está instrumentado con **OpenTelemetry** para tracing distribuido:
 
-| Métrica | Tipo | Descripción |
-|---------|------|-------------|
-| `http_requests_total` | Counter | Total de solicitudes HTTP por método, ruta y código |
-| `http_request_duration_seconds` | Histogram | Duración de solicitudes en buckets (p50, p90, p99) |
-| `db_pool_size` | Gauge | Conexiones del pool (total, active, idle, waiting) |
-| `app_info` | Gauge | Versión y versión de Node.js |
-| Default metrics | — | CPU, memoria, event loop lag, garbage collector |
+- Usa `@opentelemetry/sdk-node` con auto-instrumentación de HTTP, Express y PostgreSQL
+- Envía trazas vía OTLP HTTP a Tempo en `http://tempo:4318/v1/traces`
+- Cada request genera un trace con spans para la consulta HTTP, el middleware Express y las queries a la BD
+- En Grafana puedes explorar trazas desde el datasource Tempo y crear paneles de gráficos de servicios
 
-### Dashboard Grafana
-
-Se provisioninga automáticamente un dashboard con:
-
-- Health status del backend
-- Uptime
-- Requests por segundo
-- Latencia (p50/p90/p99)
-- HTTP status codes (2xx/4xx/5xx)
-- Conexiones del pool de BD
-- CPU y memoria de Node.js
+El dashboard de Grafana tiene un panel **"Backend Logs"** que consulta logs de Loki filtrados por `service="backend"`.
 
 ### Acceso
 
 ```bash
-# Abrir en el navegador
 open http://localhost:3001
-
-# Credenciales por defecto
 # Usuario: admin
 # Contrasena: grafana123
 ```

@@ -27,6 +27,7 @@ services:
       POSTGRES_HOST: database
       POSTGRES_PORT: 5432
       CORS_ORIGIN: http://localhost:8081
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318/v1/traces
     depends_on:
       database:
         condition: service_healthy
@@ -120,6 +121,46 @@ services:
       - app-network
     restart: unless-stopped
 
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command:
+      - '-config.file=/etc/loki/local-config.yaml'
+      - '-auth.enabled=false'
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - ./monitoring/loki/promtail-config.yml:/etc/promtail/config.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - '-config.file=/etc/promtail/config.yml'
+    depends_on:
+      - loki
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  tempo:
+    image: grafana/tempo:latest
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+      - "4318:4318"
+    user: root
+    volumes:
+      - ./monitoring/tempo/tempo.yml:/etc/tempo/tempo.yml
+      - tempo_data:/tmp/tempo
+    command:
+      - '-config.file=/etc/tempo/tempo.yml'
+    networks:
+      - app-network
+    restart: unless-stopped
+
 networks:
   app-network:
     driver: bridge
@@ -128,3 +169,4 @@ volumes:
   db_data:
   prometheus_data:
   grafana_data:
+  tempo_data:

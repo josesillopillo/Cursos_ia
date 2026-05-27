@@ -20,6 +20,7 @@ RUN apk add --no-cache curl && \
 
 COPY --from=builder /build/node_modules ./node_modules
 COPY backend/server.js ./
+COPY backend/tracing.js ./
 COPY backend/infisical.js ./
 COPY backend/prometheus.js ./
 COPY backend/docker-entrypoint.sh ./
